@@ -40,33 +40,27 @@ export function Features(_props: FeaturesProps) {
     {
       id: 'fast',
       num: '01',
-      title: t('Lightning Fast'),
+      title: t('Zero Code Changes'),
       desc: t(
-        'Optimized network architecture ensures millisecond response times'
+        'Compatible with OpenAI SDK — swap base URL and you\'re done'
       ),
       span: 'md:col-span-2',
-      icon: <Zap className='size-4 text-blue-400' />,
+      icon: <Zap className='size-4 text-orange-400' />,
       visual: (
-        <div className='mt-4 grid grid-cols-3 gap-2'>
-          {['OpenAI', 'Claude', 'Gemini', 'DeepSeek', 'Qwen', 'Llama'].map(
-            (name) => (
-              <div
-                key={name}
-                className='border-border/30 bg-muted/20 text-muted-foreground flex items-center justify-center rounded-lg border px-3 py-2 text-xs transition-colors duration-300 hover:border-blue-500/30 hover:bg-blue-500/5'
-              >
-                {name}
-              </div>
-            )
-          )}
+        <div className='mt-4 rounded-lg bg-muted/30 border border-border/40 p-3 font-mono text-xs'>
+          <div className='text-muted-foreground/50 mb-1'>// Before</div>
+          <div className='text-red-400/70 line-through'>baseURL: "https://api.openai.com/v1"</div>
+          <div className='text-muted-foreground/50 mt-2 mb-1'>// After</div>
+          <div className='text-orange-400'>baseURL: "https://your-gateway/v1"</div>
         </div>
       ),
     },
     {
       id: 'secure',
       num: '02',
-      title: t('Secure & Reliable'),
+      title: t('Cost Control'),
       desc: t(
-        'Enterprise-grade security with comprehensive permission management'
+        'Per-user budgets, rate limits and real-time spend tracking'
       ),
       span: 'md:col-span-1',
       icon: <Shield className='size-4 text-emerald-400' />,
@@ -101,19 +95,19 @@ export function Features(_props: FeaturesProps) {
     {
       id: 'global',
       num: '03',
-      title: t('Global Coverage'),
-      desc: t('Multi-region deployment for stable global access'),
+      title: t('Smart Routing'),
+      desc: t('Automatic failover and load balancing across providers'),
       span: 'md:col-span-1',
-      icon: <Globe className='size-4 text-violet-400' />,
+      icon: <Globe className='size-4 text-amber-400' />,
       visual: (
         <div className='mt-4 space-y-2'>
-          {[t('Load Balancing'), t('Rate Limiting'), t('Cost Tracking')].map(
+          {[t('Primary: GPT-4o'), t('Fallback: Claude 3.5'), t('Fallback: Gemini Pro')].map(
             (step, i) => (
               <div key={step} className='flex items-center gap-2'>
                 <div
                   className={`flex size-6 items-center justify-center rounded-full text-[10px] font-bold ${
-                    i === 1
-                      ? 'border border-blue-500/30 bg-blue-500/20 text-blue-500'
+                    i === 0
+                      ? 'border border-orange-500/30 bg-orange-500/20 text-orange-500'
                       : 'border-border/40 bg-muted text-muted-foreground border'
                   }`}
                 >
@@ -130,14 +124,14 @@ export function Features(_props: FeaturesProps) {
     {
       id: 'developer',
       num: '04',
-      title: t('Developer Friendly'),
-      desc: t('Compatible API routes for common AI application workflows'),
+      title: t('Full Observability'),
+      desc: t('Request logs, token usage, latency and error rates per key'),
       span: 'md:col-span-2',
       icon: <Code className='size-4 text-amber-400' />,
       visual: (
         <div className='mt-4 flex items-center gap-3'>
           <div className='flex -space-x-2'>
-            {['API', 'SDK', 'CLI', 'Docs'].map((n) => (
+            {['Logs', 'Cost', 'RPM', 'TPM'].map((n) => (
               <div
                 key={n}
                 className='border-background from-muted to-muted/60 text-muted-foreground flex size-8 items-center justify-center rounded-full border-2 bg-gradient-to-br text-[9px] font-bold'
@@ -147,8 +141,8 @@ export function Features(_props: FeaturesProps) {
             ))}
           </div>
           <div className='text-muted-foreground flex items-center gap-1.5 text-xs'>
-            <Code className='size-3.5 text-blue-500' />
-            {t('Multi-protocol Compatible')}
+            <Code className='size-3.5 text-orange-500' />
+            {t('Real-time Dashboard')}
           </div>
         </div>
       ),
@@ -158,23 +152,23 @@ export function Features(_props: FeaturesProps) {
   const additionalFeatures = [
     {
       icon: <Gauge className='size-5' strokeWidth={1.5} />,
-      title: t('High Performance'),
-      desc: t('Support for high concurrency with automatic load balancing'),
+      title: t('Low Latency'),
+      desc: t('Minimal overhead proxy with connection pooling'),
     },
     {
       icon: <DollarSign className='size-5' strokeWidth={1.5} />,
-      title: t('Transparent Billing'),
-      desc: t('Pay-as-you-go with real-time usage monitoring'),
+      title: t('Usage Billing'),
+      desc: t('Charge users by token with customizable rate cards'),
     },
     {
       icon: <Users className='size-5' strokeWidth={1.5} />,
-      title: t('Team Collaboration'),
-      desc: t('Multi-user management with flexible permission allocation'),
+      title: t('Multi-tenant'),
+      desc: t('Isolated keys and quotas for each user or team'),
     },
     {
       icon: <HeartHandshake className='size-5' strokeWidth={1.5} />,
-      title: t('Open Source'),
-      desc: t('Community driven, self-hosted, and extensible'),
+      title: t('Self-hosted'),
+      desc: t('Your data stays on your infrastructure, always'),
     },
   ]
 
@@ -183,12 +177,12 @@ export function Features(_props: FeaturesProps) {
       <div className='mx-auto max-w-6xl'>
         <AnimateInView className='mb-16 max-w-lg'>
           <p className='text-muted-foreground mb-3 text-xs font-medium tracking-widest uppercase'>
-            {t('Core Features')}
+            {t('Why developers choose us')}
           </p>
           <h2 className='text-2xl leading-tight font-bold tracking-tight md:text-3xl'>
-            {t('Built for developers,')}
+            {t('Everything you need,')}
             <br />
-            {t('designed for scale')}
+            {t('nothing you don\'t')}
           </h2>
         </AnimateInView>
 
