@@ -22,6 +22,7 @@ import {
   CreditCard,
   FileText,
   FlaskConical,
+  Image,
   Key,
   LayoutDashboard,
   ListTodo,
@@ -55,6 +56,12 @@ export function useSidebarData(): SidebarData {
             title: t('Playground'),
             url: '/playground',
             icon: FlaskConical,
+          },
+          {
+            title: t('Drawing'),
+            url: 'https://draw.dahlo.live/',
+            icon: Image,
+            external: true,
           },
           {
             title: t('Chat'),
