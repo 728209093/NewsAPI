@@ -23,6 +23,10 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import {
+  buildRowsFromJson,
+  type EditorRow,
+} from '@/components/json-editor-utils'
 
 type JsonEditorProps = {
   value: string
@@ -35,12 +39,6 @@ type JsonEditorProps = {
   emptyMessage?: string
   template?: Record<string, unknown>
   valueType?: 'string' | 'number' | 'any'
-}
-
-type EditorRow = {
-  id: string
-  key: string
-  value: string
 }
 
 export function JsonEditor({
@@ -63,37 +61,25 @@ export function JsonEditor({
   const resolvedKeyLabel = keyLabel ?? t('Key')
   const resolvedValueLabel = valueLabel ?? t('Value')
   const [mode, setMode] = useState<'visual' | 'json'>('visual')
-  const [rows, setRows] = useState<EditorRow[]>([])
+  const [rows, setRows] = useState<EditorRow[]>(() => {
+    return buildRowsFromJson(value) ?? []
+  })
   const [jsonValue, setJsonValue] = useState(value)
-
-  const parseJsonToRows = (json: string) => {
-    try {
-      if (!json.trim()) {
-        setRows([])
-        return
-      }
-      const parsed = JSON.parse(json)
-      const newRows: EditorRow[] = Object.entries(parsed).map(
-        ([key, val], index) => ({
-          id: `${Date.now()}-${index}`,
-          key,
-          value: typeof val === 'object' ? JSON.stringify(val) : String(val),
-        })
-      )
-      setRows(newRows)
-    } catch (_error) {
-      // Invalid JSON, keep current rows
-    }
-  }
 
   // Parse JSON to rows when value changes externally
   useEffect(() => {
-    if (value !== jsonValue) {
-      setJsonValue(value)
-      parseJsonToRows(value)
+    if (value === jsonValue) {
+      return
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value])
+
+    // Mirror externally controlled form resets into the local editor state.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setJsonValue(value)
+    const nextRows = buildRowsFromJson(value)
+    if (nextRows !== null) {
+      setRows(nextRows)
+    }
+  }, [jsonValue, value])
 
   const convertRowsToJson = (updatedRows: EditorRow[]): string => {
     if (updatedRows.length === 0) {
@@ -158,7 +144,10 @@ export function JsonEditor({
   const handleJsonChange = (newJson: string) => {
     setJsonValue(newJson)
     onChange(newJson)
-    parseJsonToRows(newJson)
+    const nextRows = buildRowsFromJson(newJson)
+    if (nextRows !== null) {
+      setRows(nextRows)
+    }
   }
 
   const handleFillTemplate = () => {
@@ -166,7 +155,10 @@ export function JsonEditor({
     const templateJson = JSON.stringify(template, null, 2)
     setJsonValue(templateJson)
     onChange(templateJson)
-    parseJsonToRows(templateJson)
+    const nextRows = buildRowsFromJson(templateJson)
+    if (nextRows !== null) {
+      setRows(nextRows)
+    }
   }
 
   const toggleMode = () => {
@@ -178,7 +170,10 @@ export function JsonEditor({
       setMode('json')
     } else {
       // Switching to visual mode: sync JSON to rows
-      parseJsonToRows(jsonValue)
+      const nextRows = buildRowsFromJson(jsonValue)
+      if (nextRows !== null) {
+        setRows(nextRows)
+      }
       setMode('visual')
     }
   }
